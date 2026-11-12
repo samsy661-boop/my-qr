@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عارض الصور الخاص بي</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f9; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>أهلاً بك في موقعي الخاص</h2>
+        <img id="displayImage" src="" alt="جاري تحميل الصورة...">
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const imageName = urlParams.get('img');
+        if (imageName) {
+            document.getElementById('displayImage').src = imageName;
+        }
+    </script>
+</body>
+</html>
