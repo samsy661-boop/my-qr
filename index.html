@@ -5,21 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>عارض الصور الخاص بي</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f9; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 15px; }
+        body { font-family: Tahoma, Arial, sans-serif; text-align: center; background-color: #f4f4f9; padding: 20px; margin: 0; }
+        .container { max-width: 600px; margin: 20px auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        img { max-width: 100%; height: auto; border-radius: 10px; margin-top: 15px; display: none; }
+        h2 { color: #222; margin-bottom: 10px; }
+        #status { color: #666; font-size: 14px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>أهلاً بك في موقعي الخاص</h2>
-        <img id="displayImage" src="" alt="جاري تحميل الصورة...">
+        <p id="status">جاري عرض الصورة...</p>
+        <img id="displayImage" src="" alt="الصورة">
     </div>
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const imageName = urlParams.get('img');
-        if (imageName) {
-            document.getElementById('displayImage').src = imageName;
+        const params = new URLSearchParams(window.location.search);
+        const imgName = params.get('img');
+        if (imgName) {
+            const imgEl = document.getElementById('displayImage');
+            imgEl.src = "https://githubusercontent.com" + imgName;
+            imgEl.onload = () => {
+                document.getElementById('status').style.display = 'none';
+                imgEl.style.display = 'block';
+            };
         }
     </script>
 </body>
