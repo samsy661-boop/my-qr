@@ -1,1 +1,34 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font-family:Tahoma;text-align:center;background:#f4f4f9;padding:20px}.box{max-width:600px;margin:auto;background:#fff;padding:20px;border-radius:15px}img{max-width:100%;border-radius:10px;margin-top:15px}</style></head><body><div class="box"><h2>أهلاً بك في موقعي الخاص</h2><p id="s">جاري تحميل الصورة...</p><img id="i" style="display:none"></div><script>const p=new URLSearchParams(location.search).get("img");if(p){const m=document.getElementById("i");m.src="https://raw.github://usercontent.com"+p;m.onload=()=>{document.getElementById("s").remove();m.style.display="block"}}</script></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عارض الصور الخاص بي</title>
+    <style>
+        body { font-family: Tahoma, Arial, sans-serif; text-align: center; background-color: #f4f4f9; padding: 20px; margin: 0; }
+        .container { max-width: 600px; margin: 20px auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        img { max-width: 100%; height: auto; border-radius: 10px; margin-top: 15px; display: none; }
+        h2 { color: #222; margin-bottom: 10px; }
+        #status { color: #666; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>أهلاً بك في موقعي الخاص</h2>
+        <p id="status">جاري عرض الصورة...</p>
+        <img id="displayImage" src="" alt="الصورة">
+    </div>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const directUrl = params.get('u');
+        if (directUrl) {
+            const imgEl = document.getElementById('displayImage');
+            imgEl.src = directUrl;
+            imgEl.onload = () => {
+                document.getElementById('status').style.display = 'none';
+                imgEl.style.display = 'block';
+            };
+        }
+    </script>
+</body>
+</html>
