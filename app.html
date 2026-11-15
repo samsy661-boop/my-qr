@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0ea5e9">
+<title>QR SAM STUDIO - Mobile</title>
+<script src="https://cloudflare.com"></script>
+<style>
+  body { font-family: Tahoma, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 15px; text-align: center; }
+  .card { max-width: 440px; margin: auto; background: #1e293b; padding: 20px; border-radius: 18px; border: 1px solid #0ea5e9; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+  h2 { color: #0ea5e9; margin: 0 0 5px; font-size: 20px; }
+  .badge { background: #334155; padding: 5px 12px; border-radius: 20px; font-size: 12px; display: inline-block; margin-bottom: 15px; }
+  select, input { width: 92%; padding: 12px; margin: 6px 0; border-radius: 10px; border: 1px solid #475569; background: #0f172a; color: #fff; font-size: 14px; text-align: right; }
+  .row { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 10px 0; }
+  button { width: 96%; padding: 13px; margin-top: 10px; border: none; border-radius: 10px; background: #0ea5e9; color: #fff; font-size: 15px; font-weight: bold; cursor: pointer; }
+  .btn-dl { background: #10b981; display: none; }
+  #qr-box { background: #fff; padding: 16px; border-radius: 14px; display: inline-block; margin-top: 15px; }
+  .foot { margin-top: 18px; font-size: 11px; color: #94a3b8; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h2>QR SAM STUDIO</h2>
+  <div class="badge" id="status-lbl">المحاولات المجانية المتبقية: 3</div>
+  <select id="mode" onchange="switchFields()">
+    <option value="txt">نص أو رابط موقع (URL)</option>
+    <option value="wifi">شبكة واي فاي (Wi-Fi)</option>
+    <option value="vc">بطاقة اتصال (حفظ فوري)</option>
+  </select>
+  <div id="f-txt"><input id="inp-txt" placeholder="اكتب النص أو الرابط هنا..."></div>
+  <div id="f-wifi" style="display:none"><input id="inp-ssid" placeholder="اسم شبكة الواي فاي"><input id="inp-pass" placeholder="كلمة مرور الواي فاي"></div>
+  <div id="f-vc" style="display:none"><input id="inp-name" placeholder="الاسم الكامل"><input id="inp-tel" placeholder="رقم الهاتف (+963...)"></div>
+  <div class="row">
+    <label>لون الباركود:</label>
+    <input type="color" id="qr-col" value="#000000" style="width:60px;height:38px;padding:2px">
+  </div>
+  <button onclick="genQR()">توليد الباركود الآن</button>
+  <div><div id="qr-box" style="display:none"></div></div>
+  <button class="btn-dl" id="btn-dl" onclick="dlQR()">حفظ الصورة في الهاتف</button>
+  <div class="foot">تصميم: أسامة محمد (Osama Muhammad)</div>
+</div>
+
+<script>
+let tries = parseInt(localStorage.getItem("sam_tries") || "3");
+let isPro = localStorage.getItem("sam_pro") === "1";
+
+function updateBadge() {
+  document.getElementById("status-lbl").innerText = isPro ? "النسخة الكاملة مفعّلة (غير محدود) ✔" : "المحاولات المجانية المتبقية: " + tries;
+}
+updateBadge();
+
+function switchFields() {
+  const m = document.getElementById("mode").value;
+  document.getElementById("f-txt").style.display = m === "txt" ? "block" : "none";
+  document.getElementById("f-wifi").style.display = m === "wifi" ? "block" : "none";
+  document.getElementById("f-vc").style.display = m === "vc" ? "block" : "none";
+}
+
+function genQR() {
+  if (!isPro && tries <= 0) {
+    const k = prompt("انتهت المحاولات المجانية! أدخل كود التفعيل (تواصل مع أسامة محمد):");
+    if (k && k.trim().toUpperCase().startsWith("SAM-")) {
+      localStorage.setItem("sam_pro", "1"); isPro = true; updateBadge(); alert("تم تفعيل النسخة الكاملة بنجاح!");
+    } else { alert("كود غير صحيح!"); return; }
+  }
+  const m = document.getElementById("mode").value;
+  let data = "";
+  if (m === "txt") data = document.getElementById("inp-txt").value.trim();
+  else if (m === "wifi") data = `WIFI:T:WPA;S:${document.getElementById("inp-ssid").value.trim()};P:${document.getElementById("inp-pass").value.trim()};;`;
+  else if (m === "vc") data = `MECARD:N:${document.getElementById("inp-name").value.trim()};TEL:${document.getElementById("inp-tel").value.trim()};;`;
+  if (!data) { alert("يرجى إدخال البيانات أولاً!"); return; }
+
+  const box = document.getElementById("qr-box");
+  box.innerHTML = ""; box.style.display = "inline-block";
+  new QRCode(box, { text: data, width: 210, height: 210, colorDark: document.getElementById("qr-col").value, colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.L });
+  document.getElementById("btn-dl").style.display = "block";
+  if (!isPro) { tries--; localStorage.setItem("sam_tries", tries); updateBadge(); }
+}
+
+function dlQR() {
+  const img = document.querySelector("#qr-box img") || document.querySelector("#qr-box canvas");
+  if (!img) return;
+  const a = document.createElement("a");
+  a.href = img.src || img.toDataURL("image/png");
+  a.download = "QR_SAM_" + Date.now() + ".png";
+  a.click();
+}
+</script>
+</body>
+</html>
