@@ -3,39 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QR SAM STUDIO - استوديو الباركود الذكي</title>
+<title>QR SAM STUDIO</title>
 <style>
   body { font-family: Tahoma, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 0; text-align: center; }
   .ad-slot { background: #1e293b; border: 1px dashed #475569; color: #94a3b8; padding: 12px; margin: 12px auto; max-width: 720px; border-radius: 10px; font-size: 12px; }
-  .hero { max-width: 720px; margin: 20px auto; padding: 30px 20px; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 20px; border: 1px solid #0ea5e9; box-shadow: 0 10px 30px rgba(14,165,233,0.15); }
+  .hero { max-width: 720px; margin: 20px auto; padding: 30px 20px; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 20px; border: 1px solid #0ea5e9; }
   h1 { color: #0ea5e9; font-size: 26px; margin-bottom: 10px; }
   p { color: #cbd5e1; line-height: 1.7; font-size: 15px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 20px 0; text-align: right; }
   .feat { background: #0f172a; padding: 15px; border-radius: 12px; border-right: 4px solid #0ea5e9; font-size: 13px; }
   .btn { display: inline-block; padding: 14px 28px; margin: 8px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 15px; }
   .btn-app { background: #0ea5e9; color: #fff; }
-  .btn-wa { background: #10b981; color: #fff; }
   #viewer-box { max-width: 520px; margin: 25px auto; background: #1e293b; padding: 20px; border-radius: 16px; display: none; }
   #viewer-box img { max-width: 100%; border-radius: 10px; margin: 10px auto; display: block; }
   input { padding: 12px; border-radius: 8px; border: none; width: 80%; text-align: center; }
   button { padding: 10px 25px; background: #0ea5e9; color: #fff; border: none; border-radius: 8px; margin-top: 10px; font-weight: bold; cursor: pointer; }
-  .foot { padding: 20px; font-size: 12px; color: #64748b; }
 </style>
 </head>
 <body>
-<div class="ad-slot" id="top-ad">مساحة إعلانية ممولة (AdSense / إعلانات المتاجر)</div>
+<div class="ad-slot">مساحة إعلانية</div>
 
 <div id="landing-page" class="hero">
   <h1>QR SAM STUDIO PRO</h1>
-  <p>المنظومة الاحترافية الأسرع لتوليد الباركود الذكي، رفع الصور والألبومات السحابية المحمية بكلمة مرور، وبطاقات الاتصال الفورية للمطاعم والمتاجر والشركات.</p>
+  <p>المنظومة الاحترافية لتوليد الباركود الذكي، رفع الصور والألبومات السحابية المحمية بكلمة مرور، وبطاقات الاتصال الفورية للمطاعم والمتاجر والشركات.</p>
   <div class="grid">
     <div class="feat"><b>سحابة وألبوم صور:</b> ارفع صور المنيو أو المنتجات وشاركها بباركود واحد مع قفل بكلمة مرور.</div>
     <div class="feat"><b>تصاميم فنية عصرية:</b> أشكال متعددة، ألوان مخصصة، وإضافة شعار متجرك في المنتصف.</div>
     <div class="feat"><b>بطاقة اتصال ذكية:</b> حفظ رقمك وبياناتك في هاتف الزبون بضغطة زر واحدة.</div>
     <div class="feat"><b>يعمل على كل الأجهزة:</b> متوفر بنسخة الكمبيوتر الاحترافية ونسخة الموبايل السريعة.</div>
   </div>
-  <a href="./app.html" class="btn btn-app">جرّب تطبيق الموبايل الآن (مجاناً)</a>
-  <a href="https://wa.meً%20أستاذ%20أسامة،%20أرغب%20بالاشتراك%20في%20QR%20SAM%20STUDIO" class="btn btn-wa">اطلب النسخة الكاملة عبر واتساب</a>
+  <a href="./app.html" class="btn btn-app">جرّب تطبيق الموبايل الآن</a>
 </div>
 
 <div id="lk" style="display:none;margin:40px auto;max-width:400px;background:#1e293b;padding:25px;border-radius:15px">
@@ -45,8 +42,7 @@
 </div>
 <div id="viewer-box"></div>
 
-<div class="ad-slot" id="bottom-ad">مساحة إعلانية سفلية (للربح من الزيارات والمشاهدات)</div>
-<div class="foot">جميع الحقوق محفوظة © تصميم وتطوير: أسامة محمد (Osama Muhammad)</div>
+<div class="ad-slot">مساحة إعلانية</div>
 
 <script>
 const p = new URLSearchParams(location.search), u = p.get("u"), t = p.get("t"), k = p.get("k");
