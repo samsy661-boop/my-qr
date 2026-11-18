@@ -3,82 +3,209 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QR SAM STUDIO - تطبيق الموبايل</title>
+<title>QR SAM STUDIO - Mobile App</title>
 <script src="https://cloudflare.com"></script>
 <style>
-  body { font-family: Tahoma, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 12px; text-align: center; }
-  .ad { background: #1e293b; border: 1px dashed #475569; color: #94a3b8; padding: 10px; margin: 8px auto; max-width: 440px; border-radius: 8px; font-size: 11px; }
-  .card { max-width: 440px; margin: auto; background: #1e293b; padding: 20px; border-radius: 18px; border: 1px solid #0ea5e9; }
-  h2 { color: #0ea5e9; margin: 0 0 6px; font-size: 20px; }
-  .badge { background: #334155; padding: 5px 12px; border-radius: 20px; font-size: 12px; display: inline-block; margin-bottom: 12px; }
-  select, input { width: 92%; padding: 12px; margin: 6px 0; border-radius: 10px; border: 1px solid #475569; background: #0f172a; color: #fff; font-size: 14px; text-align: right; }
-  button { width: 96%; padding: 13px; margin-top: 10px; border: none; border-radius: 10px; background: #0ea5e9; color: #fff; font-size: 15px; font-weight: bold; cursor: pointer; }
-  .btn-dl { background: #10b981; display: none; }
-  #qr-box { background: #fff; padding: 16px; border-radius: 14px; display: inline-block; margin-top: 15px; }
-  .nav { margin-bottom: 10px; }
-  .nav a { color: #38bdf8; text-decoration: none; font-size: 13px; }
+  :root { --bg: #0f172a; --card: #1e293b; --txt: #f8fafc; --sub: #94a3b8; --pri: #0ea5e9; --inp: #0f172a; --brd: #334155; }
+  body.light { --bg: #f1f5f9; --card: #ffffff; --txt: #0f172a; --sub: #475569; --pri: #0284c7; --inp: #f8fafc; --brd: #cbd5e1; }
+  body { font-family: Tahoma, sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 10px 10px 80px; text-align: center; transition: 0.3s; }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; max-width: 460px; margin: 0 auto 10px; }
+  .top-btn { background: var(--card); color: var(--txt); border: 1px solid var(--brd); padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; text-decoration: none; }
+  .ad { background: var(--card); border: 1px dashed var(--brd); color: var(--sub); padding: 10px; margin: 8px auto; max-width: 460px; border-radius: 10px; font-size: 11px; }
+  .card { max-width: 460px; margin: auto; background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid var(--pri); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+  h2 { color: var(--pri); margin: 0 0 6px; font-size: 21px; }
+  .badge { background: var(--inp); border: 1px solid var(--brd); padding: 5px 14px; border-radius: 20px; font-size: 12px; display: inline-block; margin-bottom: 14px; }
+  input[type="text"], input[type="tel"], input[type="password"] { width: 92%; padding: 12px; margin: 6px 0; border-radius: 10px; border: 1px solid var(--brd); background: var(--inp); color: var(--txt); font-size: 14px; text-align: right; }
+  .file-box { border: 2px dashed var(--pri); padding: 18px; border-radius: 12px; margin: 10px 0; cursor: pointer; background: var(--inp); font-size: 14px; }
+  .opt-row { display: flex; justify-content: space-around; align-items: center; margin: 10px 0; font-size: 12px; background: var(--inp); padding: 8px; border-radius: 10px; }
+  .btn-main { width: 96%; padding: 14px; margin-top: 10px; border: none; border-radius: 12px; background: var(--pri); color: #fff; font-size: 15px; font-weight: bold; cursor: pointer; }
+  .act-row { display: none; gap: 8px; margin-top: 12px; }
+  .act-row button { flex: 1; padding: 12px; border: none; border-radius: 10px; color: #fff; font-weight: bold; cursor: pointer; font-size: 13px; }
+  #result-wrap { display: none; background: #fff; padding: 16px 16px 10px; border-radius: 16px; margin-top: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+  #frame-lbl { color: #0f172a; font-weight: bold; font-size: 15px; margin-top: 8px; display: none; }
+  .nav-bot { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--brd); display: flex; justify-content: space-around; padding: 8px 0; z-index: 99; }
+  .nav-item { background: none; border: none; color: var(--sub); font-size: 11px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; font-family: Tahoma; }
+  .nav-item.active { color: var(--pri); font-weight: bold; }
+  .nav-item span { font-size: 18px; }
+  .hist-box { text-align: right; font-size: 12px; max-height: 150px; overflow-y: auto; margin-top: 10px; display: none; }
+  .hist-item { background: var(--inp); padding: 8px; border-radius: 8px; margin-bottom: 5px; border-right: 3px solid var(--pri); word-break: break-all; }
 </style>
 </head>
 <body>
-<div class="nav"><a href="./index.html">العودة للصفحة الرئيسية والدعاية</a></div>
-<div class="ad">إعلان علوي (يظهر لجميع الزوار)</div>
+<div class="top-bar">
+  <a href="./index.html" class="top-btn">الرئيسية</a>
+  <button class="top-btn" onclick="toggleHist()">السجل</button>
+  <button class="top-btn" onclick="toggleTheme()" id="th-btn">الوضع النهاري</button>
+</div>
+<div class="ad">مساحة إعلانية علوية</div>
 <div class="card">
   <h2>QR SAM STUDIO</h2>
   <div class="badge" id="status-lbl">المحاولات المجانية المتبقية: 3</div>
-  <select id="mode" onchange="switchFields()">
-    <option value="txt">نص أو رابط موقع (URL)</option>
-    <option value="wifi">شبكة واي فاي (Wi-Fi)</option>
-    <option value="vc">بطاقة اتصال (حفظ فوري)</option>
-  </select>
-  <div id="f-txt"><input id="inp-txt" placeholder="اكتب النص أو الرابط هنا..."></div>
-  <div id="f-wifi" style="display:none"><input id="inp-ssid" placeholder="اسم شبكة الواي فاي"><input id="inp-pass" placeholder="كلمة مرور الواي فاي"></div>
-  <div id="f-vc" style="display:none"><input id="inp-name" placeholder="الاسم الكامل"><input id="inp-tel" placeholder="رقم الهاتف (+963...)"></div>
-  <div style="margin:8px 0">لون الباركود: <input type="color" id="qr-col" value="#000000" style="width:55px;height:35px;padding:2px;vertical-align:middle"></div>
-  <button onclick="genQR()">توليد الباركود الآن</button>
-  <div><div id="qr-box" style="display:none"></div></div>
-  <button class="btn-dl" id="btn-dl" onclick="dlQR()">حفظ الصورة في الهاتف</button>
+  <div id="hist-panel" class="hist-box"></div>
+
+  <div id="tab-img">
+    <div class="file-box" onclick="document.getElementById('img-inp').click()" id="img-lbl">اضغط هنا لاختيار صورة من هاتفك</div>
+    <input type="file" id="img-inp" accept="image/*" style="display:none" onchange="document.getElementById('img-lbl').innerText = 'تم اختيار: ' + this.files[0].name">
+  </div>
+  <div id="tab-txt" style="display:none"><input type="text" id="inp-txt" placeholder="اكتب النص أو رابط الموقع هنا..."></div>
+  <div id="tab-wifi" style="display:none"><input type="text" id="inp-ssid" placeholder="اسم شبكة الواي فاي"><input type="password" id="inp-pass" placeholder="كلمة مرور الواي فاي"></div>
+  <div id="tab-vc" style="display:none"><input type="text" id="inp-name" placeholder="الاسم الكامل"><input type="tel" id="inp-tel" placeholder="رقم الهاتف (+963...)"></div>
+
+  <input type="text" id="inp-frame" placeholder="نص اختياري أسفل الباركود (مثال: امسح هنا)">
+  <div class="opt-row">
+    <div>اللون: <input type="color" id="qr-col" value="#000000" style="width:36px;height:28px;border:none;vertical-align:middle"></div>
+    <div style="cursor:pointer;color:var(--pri);font-weight:bold" onclick="document.getElementById('logo-inp').click()" id="logo-lbl">+ شعار وسط</div>
+    <input type="file" id="logo-inp" accept="image/*" style="display:none" onchange="loadLogo(this)">
+  </div>
+
+  <button class="btn-main" id="gen-btn" onclick="handleGen()">توليد الباركود الآن</button>
+
+  <div>
+    <div id="result-wrap">
+      <canvas id="final-canvas"></canvas>
+      <div id="frame-lbl"></div>
+    </div>
+  </div>
+  <div id="qr-hidden" style="display:none"></div>
+
+  <div class="act-row" id="act-row">
+    <button style="background:#10b981" onclick="dlQR()">حفظ بالهاتف</button>
+    <button style="background:#0284c7" onclick="shareQR()">مشاركة مباشرة</button>
+  </div>
 </div>
-<div class="ad">إعلان سفلي (ربح إضافي من الاستخدام)</div>
+<div class="ad">مساحة إعلانية سفلية</div>
+
+<div class="nav-bot">
+  <button class="nav-item active" onclick="setTab('img', this)"><span>🖼️</span>صورة</button>
+  <button class="nav-item" onclick="setTab('txt', this)"><span>🔗</span>رابط / نص</button>
+  <button class="nav-item" onclick="setTab('wifi', this)"><span>📶</span>واي فاي</button>
+  <button class="nav-item" onclick="setTab('vc', this)"><span>👤</span>بطاقة اتصال</button>
+</div>
+
 <script>
+let curTab = "img", logoImg = null;
 let tries = parseInt(localStorage.getItem("sam_tries") || "3");
 let isPro = localStorage.getItem("sam_pro") === "1";
+
 function updateBadge() {
   document.getElementById("status-lbl").innerText = isPro ? "النسخة الكاملة مفعّلة (غير محدود) ✔" : "المحاولات المجانية المتبقية: " + tries;
 }
 updateBadge();
-function switchFields() {
-  const m = document.getElementById("mode").value;
-  document.getElementById("f-txt").style.display = m === "txt" ? "block" : "none";
-  document.getElementById("f-wifi").style.display = m === "wifi" ? "block" : "none";
-  document.getElementById("f-vc").style.display = m === "vc" ? "block" : "none";
+
+function toggleTheme() {
+  document.body.classList.toggle("light");
+  document.getElementById("th-btn").innerText = document.body.classList.contains("light") ? "الوضع الليلي" : "الوضع النهاري";
 }
-function genQR() {
+
+function setTab(t, el) {
+  curTab = t;
+  ["img", "txt", "wifi", "vc"].forEach(x => document.getElementById("tab-" + x).style.display = x === t ? "block" : "none");
+  document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+}
+
+function loadLogo(inp) {
+  if (!inp.files[0]) return;
+  const r = new FileReader();
+  r.onload = e => { logoImg = new Image(); logoImg.src = e.target.result; document.getElementById("logo-lbl").innerText = "✔ تم اختيار الشعار"; };
+  r.readAsDataURL(inp.files[0]);
+}
+
+function saveHist(type, val) {
+  let h = JSON.parse(localStorage.getItem("sam_hist") || "[]");
+  h.unshift({ t: new Date().toLocaleTimeString(), k: type, v: val });
+  localStorage.setItem("sam_hist", JSON.stringify(h.slice(0, 10)));
+}
+
+function toggleHist() {
+  const p = document.getElementById("hist-panel");
+  if (p.style.display === "block") { p.style.display = "none"; return; }
+  let h = JSON.parse(localStorage.getItem("sam_hist") || "[]");
+  p.innerHTML = h.length ? h.map(x => `<div class="hist-item"><b>${x.k}</b> (${x.t})<br>${x.v}</div>`).join("") : "لا يوجد سجل عمليات بعد.";
+  p.style.display = "block";
+}
+
+async function handleGen() {
   if (!isPro && tries <= 0) {
-    const k = prompt("انتهت المحاولات المجانية! أدخل كود التفعيل من أسامة محمد:");
+    const k = prompt("انتهت المحاولات المجانية! أدخل كود التفعيل:");
     if (k && k.trim().toUpperCase().startsWith("SAM-")) {
-      localStorage.setItem("sam_pro", "1"); isPro = true; updateBadge(); alert("تم تفعيل النسخة الكاملة بنجاح!");
+      localStorage.setItem("sam_pro", "1"); isPro = true; updateBadge(); alert("تم التفعيل بنجاح!");
     } else { alert("كود غير صحيح!"); return; }
   }
-  const m = document.getElementById("mode").value;
+
   let data = "";
-  if (m === "txt") data = document.getElementById("inp-txt").value.trim();
-  else if (m === "wifi") data = `WIFI:T:WPA;S:${document.getElementById("inp-ssid").value.trim()};P:${document.getElementById("inp-pass").value.trim()};;`;
-  else if (m === "vc") data = `MECARD:N:${document.getElementById("inp-name").value.trim()};TEL:${document.getElementById("inp-tel").value.trim()};;`;
+  const btn = document.getElementById("gen-btn");
+
+  if (curTab === "img") {
+    const f = document.getElementById("img-inp").files[0];
+    if (!f) { alert("يرجى اختيار صورة أولاً!"); return; }
+    btn.disabled = true; btn.innerText = "جاري رفع الصورة وتوليد الباركود...";
+    try {
+      const fd = new FormData();
+      fd.append("reqtype", "fileupload");
+      fd.append("fileToUpload", f);
+      const res = await fetch("https://catbox.moe", { method: "POST", body: fd });
+      const url = await res.text();
+      if (!url.startsWith("http")) throw new Error("فشل الرفع");
+      data = url.trim();
+      saveHist("صورة سحابية", data);
+    } catch (e) {
+      alert("تعذر رفع الصورة حالياً، تأكد من اتصال الإنترنت.");
+      btn.disabled = false; btn.innerText = "توليد الباركود الآن"; return;
+    }
+    btn.disabled = false; btn.innerText = "توليد الباركود الآن";
+  } else if (curTab === "txt") {
+    data = document.getElementById("inp-txt").value.trim();
+    if (data) saveHist("نص / رابط", data);
+  } else if (curTab === "wifi") {
+    const s = document.getElementById("inp-ssid").value.trim();
+    const p = document.getElementById("inp-pass").value.trim();
+    if (s) { data = `WIFI:T:WPA;S:${s};P:${p};;`; saveHist("واي فاي", s); }
+  } else if (curTab === "vc") {
+    const fn = document.getElementById("inp-name").value.trim();
+    const tel = document.getElementById("inp-tel").value.trim();
+    if (fn || tel) { data = `BEGIN:VCARD\nVERSION:3.0\nN:;${fn};;;\nFN:${fn}\nTEL;TYPE=CELL:${tel}\nEND:VCARD`; saveHist("بطاقة اتصال", fn); }
+  }
+
   if (!data) { alert("يرجى إدخال البيانات أولاً!"); return; }
-  const box = document.getElementById("qr-box");
-  box.innerHTML = ""; box.style.display = "inline-block";
-  new QRCode(box, { text: data, width: 210, height: 210, colorDark: document.getElementById("qr-col").value, colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.L });
-  document.getElementById("btn-dl").style.display = "block";
-  if (!isPro) { tries--; localStorage.setItem("sam_tries", tries); updateBadge(); }
+
+  const hid = document.getElementById("qr-hidden");
+  hid.innerHTML = "";
+  new QRCode(hid, { text: data, width: 220, height: 220, colorDark: document.getElementById("qr-col").value, colorLight: "#ffffff", correctLevel: logoImg ? QRCode.CorrectLevel.H : QRCode.CorrectLevel.L });
+
+  setTimeout(() => {
+    const srcC = hid.querySelector("canvas");
+    const fText = document.getElementById("inp-frame").value.trim();
+    const fc = document.getElementById("final-canvas");
+    const ctx = fc.getContext("2d");
+    fc.width = 240; fc.height = fText ? 275 : 240;
+    ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, fc.width, fc.height);
+    ctx.drawImage(srcC, 10, 10, 220, 220);
+    if (logoImg) { ctx.fillStyle = "#ffffff"; ctx.fillRect(92, 92, 56, 56); ctx.drawImage(logoImg, 95, 95, 50, 50); }
+    if (fText) { ctx.fillStyle = "#0f172a"; ctx.font = "bold 16px Tahoma"; ctx.textAlign = "center"; ctx.fillText(fText, 120, 258); }
+    document.getElementById("result-wrap").style.display = "inline-block";
+    document.getElementById("act-row").style.display = "flex";
+    if (!isPro) { tries--; localStorage.setItem("sam_tries", tries); updateBadge(); }
+  }, 150);
 }
+
 function dlQR() {
-  const img = document.querySelector("#qr-box img") || document.querySelector("#qr-box canvas");
-  if (!img) return;
   const a = document.createElement("a");
-  a.href = img.src || img.toDataURL("image/png");
+  a.href = document.getElementById("final-canvas").toDataURL("image/png");
   a.download = "QR_SAM_" + Date.now() + ".png";
   a.click();
+}
+
+async function shareQR() {
+  const fc = document.getElementById("final-canvas");
+  fc.toBlob(async blob => {
+    const file = new File([blob], "QR_SAM.png", { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: "QR SAM STUDIO" });
+    } else { dlQR(); }
+  });
 }
 </script>
 </body>
 </html>
+
